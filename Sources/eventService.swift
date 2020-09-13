@@ -54,19 +54,18 @@ public  struct EventManager {
     }
     
     public func logMain<T>(message : String = "", item: T...) where T : Encodable {
-        let eventId = self.eventId
-        let logger = LogService(name: eventId.uuidString, withStart: false)
+//        let eventId = self.eventId
+        let logger = LogService(name: self.service, withStart: false)
         let encoder = JSONEncoder()
         if let data = try? encoder.encode(item), let parmsString = String(data: data, encoding:  .utf8) {
             logger.logMessage("\(service) ->\(message) - \(parmsString)", console: false)
         } else {
-        
             logger.logMessage("\(service) -> \(message)", console: false)
         }
     }
     public func logMain(message : String) {
-        let eventId =  self.eventId
-        let logger = LogService(name: eventId.uuidString, withStart: false)
+//        let eventId =  self.eventId
+        let logger = LogService(name: self.service, withStart: false)
         logger.logMessage("\(service) -> \(message)", console: false)
     }
     
