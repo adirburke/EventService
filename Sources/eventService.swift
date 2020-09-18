@@ -17,8 +17,13 @@ public  struct EventManager {
     
     
     public func logError(eventId : UUID? = nil,  message : String) {
-        let eventId = eventId ?? self.eventId
-        let logger = LogService(name: eventId.uuidString, withStart: false)
+        let logger : LogService
+        if let eventId = eventId {
+            logger = LogService(name: eventId.uuidString, withStart: false)
+        } else {
+            logger = LogService(name: self.service, withStart: false)
+        }
+       
         logger.logMessage("Error:: > \(service) -> \(message)", console: false)
     }
     
