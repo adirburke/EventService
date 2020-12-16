@@ -19,7 +19,7 @@ public  struct EventManager {
     
     
     
-    public func logError(eventId : UUID? = nil,  message : String) {
+    public func logError(eventId : UUID? = nil,  message : String, console : Bool = false) {
         let logger : LogService
         if let eventId = eventId {
             logger = LogService(name: eventId.uuidString, withStart: false)
@@ -27,60 +27,61 @@ public  struct EventManager {
             logger = LogService(name: self.service, withStart: false)
         }
        
-        logger.logMessage("Error:: > \(service) -> \(message)", console: false)
+        logger.logMessage("Error:: > \(service) -> \(message)", console: console)
     }
     
-    public func logEvent<T>(eventId : UUID? = nil, message : String = "", item : T) where T : Encodable {
+    public func logEvent<T>(eventId : UUID? = nil, message : String = "", item : T, console : Bool = false) where T : Encodable {
         if let eventId  = eventId {
             let logger = LogService(name: eventId.uuidString, withStart: false)
             let encoder = JSONEncoder()
             if let data = try? encoder.encode(item), let parmsString = String(data: data, encoding:  .utf8) {
-                logger.logMessage("\(service) ->\(message) - \(parmsString)", console: false)
+                logger.logMessage("\(service) ->\(message) - \(parmsString)", console: console)
             } else {
                 
-                logger.logMessage("\(service) -> \(message)", console: false)
+                logger.logMessage("\(service) -> \(message)", console: console)
             }
         } else {
-            logMain(message: message, item: item)
+            logMain(message: message, item: item, console: console)
         }
     }
-    public func logEvent<T>(eventId : UUID? = nil, message : String = "", items: T...) where T : Encodable {
+    public func logEvent<T>(eventId : UUID? = nil, message : String = "", items: T..., console : Bool = false) where T : Encodable {
         if let eventId = eventId {
             let logger = LogService(name: eventId.uuidString, withStart: false)
             let encoder = JSONEncoder()
             for i in items {
                 if let data = try? encoder.encode(i), let parmsString = String(data: data, encoding:  .utf8) {
-                    logger.logMessage("\(service) ->\(message) - \(parmsString)", console: false)
+                    logger.logMessage("\(service) ->\(message) - \(parmsString)", console: console)
                 } else {
                     
-                    logger.logMessage("\(service) -> \(message)", console: false)
+                    logger.logMessage("\(service) -> \(message)", console: console)
                 }
             }
         } else {
-            logMain(message: message, item: items)
+            logMain(message: message, item: items, console: console)
         }
     }
     
-    public func logEvent(eventId : UUID? = nil, message : String = "") {
+    public func logEvent(eventId : UUID? = nil, message : String = "", console : Bool = false) {
         if let eventId = eventId {
         let logger = LogService(name: eventId.uuidString, withStart: false)
-        logger.logMessage("\(service) -> \(message)", console: false)
+        logger.logMessage("\(service) -> \(message)", console: console)
         } else {
             logMain(message: message)
         }
     }
     
-    public func logMain<T>(message : String = "", item: T...) where T : Encodable {
+    public func logMain<T>(message : String = "", item: T..., console : Bool = false) where T : Encodable {
 //        let eventId = self.eventId
         let encoder = JSONEncoder()
         if let data = try? encoder.encode(item), let parmsString = String(data: data, encoding:  .utf8) {
-            logger.logMessage("\(service) ->\(message) - \(parmsString)", console: false)
+            logger.logMessage("\(service) ->\(message) - \(parmsString)", console: console)
         } else {
-            logger.logMessage("\(service) -> \(message)", console: false)
+            logger.logMessage("\(service) -> \(message)", console: console)
         }
     }
-    public func logMain(message : String) {
-        logger.logMessage("\(service) -> \(message)", console: false)
+    public func logMain(message : String, console : Bool = false) {
+        logger.logMessage("\(service) -> \(message)", console: console)
+
     }
     
 }
