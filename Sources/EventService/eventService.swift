@@ -1,21 +1,58 @@
 import Foundation
 import Zara_Logger
+import Logging
 
 
 
-
-public  struct EventManager {
+public struct EventManager : LogHandler {
+    public subscript(metadataKey key: String) -> Logger.Metadata.Value? {
+        get { return self.metadata[key] }
+        set { self.metadata[key] = newValue }
+    }
+    
+    public var metadata: Logger.Metadata
+    
+    public var logLevel: Logger.Level
+    
     let service : String
     let eventId : UUID
     let logger : LogService
+    public var label : String = ""
+
     
-//    private let logger : LogService
-    
-    public init(service name : String, eventId : UUID = UUID()) {
+    public init(service name : String, eventId : UUID = UUID(), level: Logger.Level = .info, metadata: Logger.Metadata = [:]) {
         self.service = name
         self.eventId = eventId
         self.logger = LogService(name: name, withStart: false)
+        self.logLevel = level
+        self.metadata = metadata
+        
     }
+    
+    public func log(level: Logger.Level,
+                    message: Logger.Message,
+                    metadata: Logger.Metadata?,
+                    source: String,
+                    file: String,
+                    function: String,
+                    line: UInt) {
+        
+        var text = ""
+        
+        
+        if self.logLevel <= .trace {
+            text += "[ \(self.label) ] "
+        }
+        
+        text += "[ \(level.name) ]"
+            + " "
+            + message.description
+        
+        
+        self.logMain(message: text, console: true)
+        
+    }
+    
     
     
     
@@ -84,4 +121,21 @@ public  struct EventManager {
 
     }
     
+}
+
+
+extension Logger.Level {
+    /// Converts log level to console style
+    
+    public var name: String {
+        switch self {
+        case .trace: return "TRACE"
+        case .debug: return "DEBUG"
+        case .info: return "INFO"
+        case .notice: return "NOTICE"
+        case .warning: return "WARNING"
+        case .error: return "ERROR"
+        case .critical: return "CRITICAL"
+        }
+    }
 }
