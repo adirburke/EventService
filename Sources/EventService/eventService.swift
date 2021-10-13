@@ -48,9 +48,7 @@ public struct EventManager : LogHandler {
             + " "
             + message.description
         
-        
-        self.logMain(message: text, console: true)
-        
+        self.logServer(message: text, console: true)
     }
     
     
@@ -116,6 +114,11 @@ public struct EventManager : LogHandler {
             logger.logMessage("\(service) -> \(message)", console: console)
         }
     }
+    public func logServer(message : String, console : Bool = false) {
+        logger.logMessage("\(message)", console: console)
+
+    }
+    
     public func logMain(message : String, console : Bool = false) {
         logger.logMessage("\(service) -> \(message)", console: console)
 
