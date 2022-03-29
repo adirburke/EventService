@@ -10,7 +10,6 @@ public struct EventManager : LogHandler {
         set { self.metadata[key] = newValue }
     }
     
-    public var metadata: Logger.Metadata
     
     public var logLevel: Logger.Level
     
@@ -40,18 +39,38 @@ public struct EventManager : LogHandler {
         var text = ""
         
         
+        let prettyMetadata = metadata?.isEmpty ?? true
+            ? self.prettyMetadata
+            : self.prettify(self.metadata.merging(metadata!, uniquingKeysWith: { _, new in new }))
+        
         if self.logLevel <= .trace {
             text += "[ \(self.label) ] "
         }
         
-        text += "[ \(level.name) ]"
+        text += ""
+            + "[ \(level.name) ]"
+            + " "
+            + ":\(prettyMetadata.map { " \($0)" } ?? "")"
             + " "
             + message.description
+        
+        
         
         self.logServer(message: text, console: true)
     }
     
+    private func prettify(_ metadata: Logger.Metadata) -> String? {
+        return !metadata.isEmpty
+            ? metadata.lazy.sorted(by: { $0.key < $1.key }).map { "\($0)=\($1)" }.joined(separator: " ")
+            : nil
+    }
     
+    private var prettyMetadata: String?
+    public var metadata = Logger.Metadata() {
+        didSet {
+            self.prettyMetadata = self.prettify(self.metadata)
+        }
+    }
     
     
     public func logError(eventId : UUID? = nil,  message : String, console : Bool = false) {
