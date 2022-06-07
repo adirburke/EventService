@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Common",
+        "repositoryURL": "https://github.com/HanavePtyLtd/projectConstants.git",
+        "state": {
+          "branch": "main",
+          "revision": "ca813190cca84449123b83a31e09b1f2c7b5c9ce",
+          "version": null
+        }
+      },
+      {
+        "package": "Zara-Logger",
+        "repositoryURL": "https://github.com/adirburke/Zara-Logger.git",
+        "state": {
+          "branch": "master",
+          "revision": "aff256522d20b4e599b0f8b9a4f9e0682c03433c",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
