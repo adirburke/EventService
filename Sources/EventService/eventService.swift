@@ -54,8 +54,6 @@ public struct EventManager : LogHandler {
             + " "
             + message.description
         
-        
-        
         self.logServer(message: text, console: true)
     }
     
@@ -134,7 +132,7 @@ public struct EventManager : LogHandler {
         }
     }
     public func logServer(message : String, console : Bool = false) {
-        logger.logMessage("\(message)", console: console)
+        logger.logger(message, console: console)
 
     }
     
