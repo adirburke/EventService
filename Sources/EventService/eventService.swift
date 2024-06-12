@@ -35,7 +35,12 @@ public struct EventManager : LogHandler {
                     file: String,
                     function: String,
                     line: UInt) {
-        if message.description.contains("UPDATE \"_jobs\" SET \"state\" = $1, \"updated_at\" = $2 WHERE \"job_id\" = (SELECT \"job_id\" FROM \"_jobs\" WHERE \"state\" = $3 AND \"queue\" = $4 AND \"created_at\" <= $5 ORDER BY \"created_at\" ASC LIMIT 1 FOR UPDATE SKIP LOCKED) RETURNING \"job_id\"") { return }
+        if message.description.contains("UPDATE \"_jobs\" SET \"state\" = $1, \"updated_at\" = $2 WHERE \"job_id\" = (SELECT \"job_id\" FROM \"_jobs\" WHERE \"state\" = $3 AND \"queue\" = $4 AND \"created_at\" <= $5") {
+            return
+        }
+        
+        
+        //UPDATE "_jobs" SET "state" = $1, "updated_at" = $2 WHERE "job_id" = (SELECT "job_id" FROM "_jobs" WHERE "state" = $3 AND "queue" = $4 AND "created_at" <= $5 ORDER BY "created_at" ASC LIMIT 1 FOR UPDATE SKIP LOCKED) RETURNING "job_id"
         
         var text = ""
         
