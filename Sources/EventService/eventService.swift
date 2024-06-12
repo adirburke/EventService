@@ -5,6 +5,9 @@ import Logging
 
 
 public struct EventManager : LogHandler {
+    
+    let annoyingQueueLogging = "UPDATE \"_jobs\" SET \"state\" = $1, \"updated_at\" = $2 WHERE \"job_id\" = (SELECT \"job_id\" FROM \"_jobs\" WHERE \"state\" = $3 AND \"queue\" = $4 AND \"created_at\" <= $5"
+    
     public subscript(metadataKey key: String) -> Logger.Metadata.Value? {
         get { return self.metadata[key] }
         set { self.metadata[key] = newValue }
@@ -35,7 +38,11 @@ public struct EventManager : LogHandler {
                     file: String,
                     function: String,
                     line: UInt) {
-        if message.description.contains("UPDATE \"_jobs\" SET \"state\" = $1, \"updated_at\" = $2 WHERE \"job_id\" = (SELECT \"job_id\" FROM \"_jobs\" WHERE \"state\" = $3 AND \"queue\" = $4 AND \"created_at\" <= $5") {
+        if message.description.contains(annoyingQueueLogging) {
+            return
+        }
+        
+        if let sql = metadata?["sql"], sql.description.contains(annoyingQueueLogging) {
             return
         }
         
