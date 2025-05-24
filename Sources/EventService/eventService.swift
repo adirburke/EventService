@@ -128,10 +128,10 @@ public struct EventManager : LogHandler {
     
     public func logEvent(eventId : UUID? = nil, message : String = "", console : Bool = false) {
         if let eventId = eventId {
-        let logger = LogService(name: eventId.uuidString, withStart: false)
-        logger.logMessage("\(service) -> \(message)", console: console)
+            let logger = LogService(name: eventId.uuidString, withStart: false)
+            logger.logMessage("\(service) -> \(message)", console: console)
         } else {
-            logMain(message: message)
+            logMain(message: message, console: console)
         }
     }
     
