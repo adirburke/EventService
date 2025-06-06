@@ -19,15 +19,17 @@ public struct EventManager : LogHandler {
     let service : String
     let eventId : UUID
     let logger : LogService
+    let console : Bool
     public var label : String = ""
 
     
-    public init(service name : String, eventId : UUID = UUID(), level: Logger.Level = .info, metadata: Logger.Metadata = [:]) {
+    public init(service name : String, eventId : UUID = UUID(), level: Logger.Level = .info, metadata: Logger.Metadata = [:], console: Bool = true) {
         self.service = name
         self.eventId = eventId
         self.logger = LogService(name: name, withStart: false)
         self.logLevel = level
         self.metadata = metadata
+        self.console = console
         
     }
     
@@ -67,7 +69,7 @@ public struct EventManager : LogHandler {
             + " "
             + message.description
         
-        self.logServer(message: text, console: true)
+        self.logServer(message: text, console: self.console)
     }
     
     private func prettify(_ metadata: Logger.Metadata) -> String? {
